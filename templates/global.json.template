@@ -1,0 +1,89 @@
+{
+    "log": {
+        "loglevel": "none"
+    },
+    "dns": {
+        "servers": [
+            "1.1.1.1",
+            "8.8.8.8"
+        ]
+    },
+    "stats": {},
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules" : [
+            {
+                "type" : "field",
+                "outboundTag" : "proxy",
+                "port" : "0-65535"
+            }
+        ]
+    },
+    "policy": {
+        "levels": {
+            "8": {
+                "handshake": 4,
+                "connIdle": 300,
+                "downlinkOnly": 0,
+                "uplinkOnly": 0
+            }
+        },
+        "system": {
+            "statsInboundUplink": true,
+            "statsInboundDownlink": true
+        }
+    },
+    "inbounds":[
+        {
+            "listen" : "127.0.0.1",
+            "protocol" : "socks",
+            "settings" : {
+                "ip" : "127.0.0.1",
+                "auth" : "noauth",
+                "udp" : false
+            },
+            "tag" : "socksinbound",
+            "port" : 1081
+        },
+        {
+            "listen" : "127.0.0.1",
+            "protocol" : "http",
+            "settings" : {
+                "timeout" : 0
+            },
+            "tag" : "httpinbound",
+            "port" : 8001
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "v2ray.com",
+                        "port": 443,
+                        "users": [
+                            {
+                                "alterId": 2,
+                                "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeee",
+                                "level": 8,
+                                "security": "auto"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "tag": "proxy",
+            "streamSettings": {
+                "network": "tcp",
+                "security": "",
+                "tlssettings": {},
+                "wssettings": {}
+            },
+            "mux": {
+                "enabled": false
+            }
+        }
+    ]
+}
